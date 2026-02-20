@@ -11,33 +11,42 @@ type Props = {
 export default function PerfumeCard({ perfume, index = 0 }: Props) {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 30 }}
+      initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: '-50px' }}
-      transition={{ duration: 0.5, delay: index * 0.1 }}
+      viewport={{ once: true, margin: '-40px' }}
+      transition={{ duration: 0.4, delay: index * 0.08, ease: [0.22, 1, 0.36, 1] }}
     >
-      <Link to={`/perfume/${perfume.id}`}>
+      <Link to={`/perfume/${perfume.id}`} className="block group">
         <motion.div
-          className="glass-card overflow-hidden group cursor-pointer"
-          whileHover={{ y: -6, boxShadow: '0 20px 60px hsl(0 0% 0% / 0.5)' }}
-          transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+          className="glass-card overflow-hidden rounded-xl"
+          whileHover={{ y: -4, boxShadow: '0 16px 50px hsl(0 0% 0% / 0.4)' }}
+          transition={{ type: 'spring', stiffness: 400, damping: 25 }}
         >
-          <div className="aspect-[3/4] overflow-hidden">
+          {/* Image with dark overlay for consistency */}
+          <div className="aspect-[4/5] overflow-hidden relative bg-secondary">
             <img
               src={perfume.image_url}
               alt={perfume.name}
-              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
               loading="lazy"
             />
+            <div className="absolute inset-0 bg-gradient-to-t from-card via-transparent to-transparent opacity-60" />
+            {/* Price badge */}
+            <div className="absolute top-3 right-3 px-2.5 py-1 rounded-md bg-background/80 backdrop-blur-sm">
+              <span className="text-xs font-body font-semibold text-primary">${perfume.price}</span>
+            </div>
           </div>
-          <div className="p-4 space-y-2">
-            <p className="text-xs uppercase tracking-[0.2em] text-primary font-body">
+
+          {/* Info */}
+          <div className="p-4 space-y-1.5">
+            <p className="text-[10px] uppercase tracking-[0.2em] text-primary/80 font-body font-medium">
               {perfume.brand}
             </p>
-            <h3 className="font-heading text-xl text-foreground">{perfume.name}</h3>
-            <div className="flex items-center justify-between">
-              <span className="text-sm text-muted-foreground capitalize">{perfume.scent_family}</span>
-              <span className="text-primary font-body font-medium">${perfume.price}</span>
+            <h3 className="font-heading text-lg text-foreground leading-tight">{perfume.name}</h3>
+            <div className="flex items-center gap-2">
+              <span className="text-xs text-muted-foreground font-body capitalize">{perfume.scent_family}</span>
+              <span className="w-1 h-1 rounded-full bg-border" />
+              <span className="text-xs text-muted-foreground font-body capitalize">{perfume.gender}</span>
             </div>
           </div>
         </motion.div>

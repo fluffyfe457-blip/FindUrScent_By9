@@ -5,42 +5,40 @@ import { ArrowRight } from 'lucide-react'
 
 export default function Guide() {
   return (
-    <div className="min-h-screen py-24 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto">
+    <div className="min-h-screen pt-20 pb-16 px-6 sm:px-8 lg:px-12 max-w-4xl mx-auto">
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
+        initial={{ opacity: 0, y: 15 }}
         animate={{ opacity: 1, y: 0 }}
-        className="space-y-4 mb-16 text-center"
+        className="space-y-3 mb-14 text-center"
       >
-        <p className="text-primary uppercase tracking-[0.2em] text-sm font-body">Learn</p>
-        <h1 className="font-heading text-4xl sm:text-6xl text-foreground">
+        <p className="text-primary uppercase tracking-[0.2em] text-xs font-body">Learn</p>
+        <h1 className="font-heading text-3xl sm:text-5xl text-foreground">
           The Scent Family Guide
         </h1>
-        <p className="text-muted-foreground font-body max-w-xl mx-auto">
+        <p className="text-muted-foreground font-body text-sm max-w-lg mx-auto leading-relaxed">
           Understanding scent families is the first step to finding your signature fragrance.
-          Each family has a distinct personality and mood.
         </p>
       </motion.div>
 
-      <div className="space-y-6">
+      <div className="space-y-4">
         {scentFamilies.map((family, i) => (
           <motion.div
             key={family.key}
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ delay: i * 0.1 }}
-            className={`glass-card p-6 sm:p-8 bg-gradient-to-r ${family.color}`}
+            transition={{ delay: i * 0.06 }}
           >
-            <div className="space-y-4">
-              <h2 className="font-heading text-3xl text-foreground">{family.name}</h2>
-              <p className="text-muted-foreground font-body leading-relaxed max-w-2xl">
+            <div className={`p-6 rounded-xl border border-border bg-gradient-to-r ${family.color} space-y-3`}>
+              <h2 className="font-heading text-2xl text-foreground">{family.name}</h2>
+              <p className="text-muted-foreground font-body text-sm leading-relaxed max-w-2xl">
                 {family.description}
               </p>
-              <div className="flex flex-wrap gap-2">
+              <div className="flex flex-wrap gap-1.5">
                 {family.examples.map(ex => (
                   <span
                     key={ex}
-                    className="px-3 py-1 text-xs font-body glass-card text-foreground rounded-full"
+                    className="px-2.5 py-1 text-[10px] font-body border border-border/50 text-foreground/80 rounded-full"
                   >
                     {ex}
                   </span>
@@ -48,9 +46,9 @@ export default function Guide() {
               </div>
               <Link
                 to={`/explore?family=${family.key}`}
-                className="inline-flex items-center gap-1 text-primary text-sm font-body mt-2 hover:opacity-80 transition-opacity"
+                className="inline-flex items-center gap-1 text-primary text-xs font-body hover:opacity-80 transition-opacity"
               >
-                Browse {family.name} fragrances <ArrowRight size={14} />
+                Browse {family.name} <ArrowRight size={12} />
               </Link>
             </div>
           </motion.div>
@@ -62,14 +60,14 @@ export default function Guide() {
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         viewport={{ once: true }}
-        className="text-center mt-20 space-y-4"
+        className="text-center mt-16 space-y-3"
       >
-        <h3 className="font-heading text-2xl text-foreground">Ready to find your scent?</h3>
+        <h3 className="font-heading text-xl text-foreground">Ready to find your scent?</h3>
         <Link to="/quiz">
           <motion.button
-            className="px-8 py-4 bg-primary text-primary-foreground font-body font-medium rounded-md"
-            whileHover={{ scale: 1.03 }}
-            whileTap={{ scale: 0.97 }}
+            className="px-7 py-3 bg-primary text-primary-foreground font-body font-medium text-sm rounded-lg"
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
           >
             Take the Quiz →
           </motion.button>
