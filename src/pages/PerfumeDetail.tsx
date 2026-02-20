@@ -4,7 +4,7 @@ import { perfumes } from '@/data/perfumes'
 import { useCollection } from '@/hooks/useCollection'
 import CollectionButton from '@/components/CollectionButton'
 import PerfumeCard from '@/components/PerfumeCard'
-import { ArrowLeft, Droplets, Wind, Clock } from 'lucide-react'
+import { ArrowLeft, ExternalLink } from 'lucide-react'
 
 export default function PerfumeDetail() {
   const { id } = useParams<{ id: string }>()
@@ -19,22 +19,29 @@ export default function PerfumeDetail() {
   const baseNotes = perfume.notes.filter(n => n.type === 'base')
 
   return (
-    <div className="min-h-screen py-24 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto">
-      <Link
-        to="/explore"
-        className="inline-flex items-center gap-1 text-muted-foreground text-sm font-body hover:text-foreground transition-colors mb-8"
+    <div className="min-h-screen pt-20 pb-16 px-6 sm:px-8 lg:px-12 max-w-6xl mx-auto">
+      {/* Breadcrumb */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        className="mb-8"
       >
-        <ArrowLeft size={14} /> Back to Explore
-      </Link>
+        <Link
+          to="/explore"
+          className="inline-flex items-center gap-1.5 text-muted-foreground text-xs font-body hover:text-foreground transition-colors"
+        >
+          <ArrowLeft size={12} /> Back to Explore
+        </Link>
+      </motion.div>
 
-      <div className="grid lg:grid-cols-2 gap-12 mb-20">
+      <div className="grid lg:grid-cols-[1fr,1.2fr] gap-10 lg:gap-14 mb-24">
         {/* Image */}
         <motion.div
-          initial={{ opacity: 0, x: -30 }}
-          animate={{ opacity: 1, x: 0 }}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          <div className="aspect-[3/4] rounded-xl overflow-hidden glass-card">
+          <div className="aspect-[3/4] rounded-xl overflow-hidden bg-secondary sticky top-20">
             <img
               src={perfume.image_url}
               alt={perfume.name}
@@ -45,55 +52,60 @@ export default function PerfumeDetail() {
 
         {/* Details */}
         <motion.div
-          initial={{ opacity: 0, x: 30 }}
-          animate={{ opacity: 1, x: 0 }}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.1 }}
-          className="space-y-8"
+          className="space-y-7"
         >
-          <div className="space-y-3">
-            <p className="text-primary uppercase tracking-[0.2em] text-sm font-body">{perfume.brand}</p>
-            <h1 className="font-heading text-4xl sm:text-5xl text-foreground">{perfume.name}</h1>
-            <p className="text-3xl font-heading text-primary font-semibold">${perfume.price}</p>
+          {/* Header */}
+          <div className="space-y-2">
+            <p className="text-primary uppercase tracking-[0.2em] text-xs font-body font-medium">{perfume.brand}</p>
+            <h1 className="font-heading text-3xl sm:text-4xl text-foreground">{perfume.name}</h1>
+            <p className="text-2xl font-heading text-primary font-semibold">${perfume.price}</p>
           </div>
 
-          <p className="text-muted-foreground font-body leading-relaxed">{perfume.description}</p>
+          <p className="text-muted-foreground font-body text-sm leading-relaxed">{perfume.description}</p>
 
-          {/* Stats */}
-          <div className="grid grid-cols-3 gap-4">
-            <div className="glass-card p-4 text-center space-y-1">
-              <Clock size={18} className="mx-auto text-primary" />
-              <p className="text-xs text-muted-foreground font-body">Longevity</p>
-              <p className="text-lg font-heading text-foreground">{perfume.longevity}/10</p>
-            </div>
-            <div className="glass-card p-4 text-center space-y-1">
-              <Wind size={18} className="mx-auto text-primary" />
-              <p className="text-xs text-muted-foreground font-body">Sillage</p>
-              <p className="text-lg font-heading text-foreground">{perfume.sillage}/10</p>
-            </div>
-            <div className="glass-card p-4 text-center space-y-1">
-              <Droplets size={18} className="mx-auto text-primary" />
-              <p className="text-xs text-muted-foreground font-body">Family</p>
-              <p className="text-lg font-heading text-foreground capitalize">{perfume.scent_family}</p>
-            </div>
+          {/* Stats - horizontal */}
+          <div className="flex gap-6">
+            {[
+              { label: 'Longevity', value: perfume.longevity },
+              { label: 'Sillage', value: perfume.sillage },
+            ].map(stat => (
+              <div key={stat.label} className="space-y-1.5">
+                <p className="text-xs text-muted-foreground font-body">{stat.label}</p>
+                <div className="flex gap-0.5">
+                  {Array.from({ length: 10 }).map((_, i) => (
+                    <div
+                      key={i}
+                      className={`w-2.5 h-5 rounded-[2px] ${
+                        i < stat.value ? 'gold-border-gradient' : 'bg-secondary'
+                      }`}
+                    />
+                  ))}
+                </div>
+              </div>
+            ))}
           </div>
 
           {/* Tags */}
-          <div className="space-y-3">
-            <div className="flex flex-wrap gap-2">
-              {perfume.season.map(s => (
-                <span key={s} className="px-3 py-1 text-xs font-body glass-card text-muted-foreground capitalize rounded-full">
-                  {s}
-                </span>
-              ))}
-              {perfume.occasion.map(o => (
-                <span key={o} className="px-3 py-1 text-xs font-body glass-card text-muted-foreground capitalize rounded-full">
-                  {o}
-                </span>
-              ))}
-              <span className="px-3 py-1 text-xs font-body bg-primary/10 text-primary capitalize rounded-full">
-                {perfume.gender}
+          <div className="flex flex-wrap gap-1.5">
+            <span className="px-2.5 py-1 text-[10px] font-body font-medium bg-primary/10 text-primary capitalize rounded-full">
+              {perfume.gender}
+            </span>
+            <span className="px-2.5 py-1 text-[10px] font-body font-medium bg-primary/10 text-primary capitalize rounded-full">
+              {perfume.scent_family}
+            </span>
+            {perfume.season.map(s => (
+              <span key={s} className="px-2.5 py-1 text-[10px] font-body border border-border text-muted-foreground capitalize rounded-full">
+                {s}
               </span>
-            </div>
+            ))}
+            {perfume.occasion.map(o => (
+              <span key={o} className="px-2.5 py-1 text-[10px] font-body border border-border text-muted-foreground capitalize rounded-full">
+                {o}
+              </span>
+            ))}
           </div>
 
           {/* Collection Buttons */}
@@ -105,19 +117,32 @@ export default function PerfumeDetail() {
             onRemove={removeFromCollection}
           />
 
-          {/* Notes Pyramid */}
-          <div className="space-y-4">
-            <h3 className="font-heading text-xl text-foreground">Scent Notes</h3>
+          {/* Buy link */}
+          <a
+            href={perfume.buy_link}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 text-primary text-sm font-body hover:opacity-80 transition-opacity"
+          >
+            <ExternalLink size={13} /> Buy Now
+          </a>
+
+          {/* Scent Notes Pyramid */}
+          <div className="space-y-5 pt-2 border-t border-border">
+            <h3 className="font-heading text-lg text-foreground pt-3">Scent Notes</h3>
             {[
-              { label: 'Top Notes', notes: topNotes },
-              { label: 'Heart Notes', notes: middleNotes },
-              { label: 'Base Notes', notes: baseNotes },
-            ].map(({ label, notes }) => (
-              <div key={label} className="space-y-1">
-                <p className="text-xs text-primary uppercase tracking-wider font-body">{label}</p>
-                <div className="flex flex-wrap gap-2">
+              { label: 'Top Notes', notes: topNotes, desc: 'First impression, fades quickly' },
+              { label: 'Heart Notes', notes: middleNotes, desc: 'The core of the fragrance' },
+              { label: 'Base Notes', notes: baseNotes, desc: 'Long-lasting foundation' },
+            ].map(({ label, notes, desc }) => (
+              <div key={label} className="space-y-2">
+                <div>
+                  <p className="text-xs text-primary uppercase tracking-wider font-body font-medium">{label}</p>
+                  <p className="text-[10px] text-muted-foreground font-body">{desc}</p>
+                </div>
+                <div className="flex flex-wrap gap-1.5">
                   {notes.map(n => (
-                    <span key={n.name} className="px-3 py-1 text-sm font-body glass-card text-foreground rounded-full">
+                    <span key={n.name} className="px-2.5 py-1 text-xs font-body border border-border text-foreground rounded-full">
                       {n.name}
                     </span>
                   ))}
@@ -130,9 +155,12 @@ export default function PerfumeDetail() {
 
       {/* Similar */}
       {similar.length > 0 && (
-        <section className="space-y-6">
-          <h2 className="font-heading text-3xl text-foreground">Similar Fragrances</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <section className="space-y-6 border-t border-border pt-12">
+          <div className="space-y-1">
+            <p className="text-primary uppercase tracking-[0.2em] text-xs font-body">You May Also Like</p>
+            <h2 className="font-heading text-2xl text-foreground">Similar Fragrances</h2>
+          </div>
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 sm:gap-5">
             {similar.map((p, i) => (
               <PerfumeCard key={p.id} perfume={p} index={i} />
             ))}

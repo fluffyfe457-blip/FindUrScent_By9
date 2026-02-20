@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { quizQuestions } from '@/data/perfumes'
 import { useQuiz } from '@/hooks/useQuiz'
-import { ArrowLeft, ArrowRight } from 'lucide-react'
+import { ArrowLeft, ArrowRight, Check } from 'lucide-react'
 
 export default function Quiz() {
   const navigate = useNavigate()
@@ -11,7 +11,6 @@ export default function Quiz() {
   const question = quizQuestions[currentStep]
   const totalSteps = quizQuestions.length
 
-  // Get current answer for this question
   const currentAnswer = answers.find(a => a.questionId === question.id)?.value
 
   const handleSelect = (value: string) => {
@@ -40,7 +39,6 @@ export default function Quiz() {
     if (currentStep < totalSteps - 1) {
       setCurrentStep(currentStep + 1)
     } else {
-      // Navigate to results - pass state
       const results = getResults()
       navigate('/results', { state: { results: results.slice(0, 5) } })
     }
@@ -51,58 +49,71 @@ export default function Quiz() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center px-4 py-24">
-      {/* Progress */}
-      <div className="w-full max-w-lg mb-12">
-        <div className="flex justify-between text-sm text-muted-foreground font-body mb-3">
-          <span>Step {currentStep + 1} of {totalSteps}</span>
-          <span>{Math.round(((currentStep + 1) / totalSteps) * 100)}%</span>
+    <div className="min-h-[100svh] flex flex-col items-center justify-center px-6 py-24">
+      {/* Step indicators */}
+      <div className="w-full max-w-md mb-14">
+        <div className="flex gap-1.5">
+          {Array.from({ length: totalSteps }).map((_, i) => (
+            <div key={i} className="flex-1 h-1 rounded-full overflow-hidden bg-secondary">
+              <motion.div
+                className="h-full gold-border-gradient"
+                initial={false}
+                animate={{ width: i <= currentStep ? '100%' : '0%' }}
+                transition={{ duration: 0.4, ease: 'easeOut' }}
+              />
+            </div>
+          ))}
         </div>
-        <div className="h-1 bg-secondary rounded-full overflow-hidden">
-          <motion.div
-            className="h-full gold-border-gradient"
-            animate={{ width: `${((currentStep + 1) / totalSteps) * 100}%` }}
-            transition={{ duration: 0.4, ease: 'easeOut' }}
-          />
-        </div>
+        <p className="text-center text-xs text-muted-foreground font-body mt-3">
+          Step {currentStep + 1} of {totalSteps}
+        </p>
       </div>
 
       {/* Question Card */}
-      <div className="w-full max-w-lg">
+      <div className="w-full max-w-md">
         <AnimatePresence mode="wait">
           <motion.div
             key={question.id}
-            initial={{ opacity: 0, x: 60 }}
+            initial={{ opacity: 0, x: 50 }}
             animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -60 }}
-            transition={{ duration: 0.35, ease: 'easeInOut' }}
+            exit={{ opacity: 0, x: -50 }}
+            transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
             className="space-y-8"
           >
-            <h2 className="font-heading text-3xl sm:text-4xl text-foreground text-center">
+            <h2 className="font-heading text-2xl sm:text-3xl text-foreground text-center leading-tight">
               {question.question}
             </h2>
 
             {question.multiple && (
-              <p className="text-center text-muted-foreground text-sm font-body">
+              <p className="text-center text-muted-foreground text-xs font-body">
                 Select all that apply
               </p>
             )}
 
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-2 gap-2.5">
               {question.options.map(option => (
                 <motion.button
                   key={option.value}
                   onClick={() => handleSelect(option.value)}
-                  className={`p-5 rounded-lg text-center font-body transition-colors ${
+                  className={`relative p-4 rounded-xl text-center font-body transition-all duration-200 border ${
                     isSelected(option.value)
-                      ? 'bg-primary text-primary-foreground gold-glow'
-                      : 'glass-card text-foreground hover:border-primary/30'
+                      ? 'bg-primary/10 border-primary/40 text-foreground'
+                      : 'bg-card/50 border-border/50 text-muted-foreground hover:border-primary/20 hover:text-foreground'
                   }`}
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                 >
-                  <span className="text-2xl block mb-2">{option.icon}</span>
-                  <span className="text-sm font-medium">{option.label}</span>
+                  {isSelected(option.value) && (
+                    <motion.div
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      className="absolute top-2 right-2 w-4 h-4 rounded-full bg-primary flex items-center justify-center"
+                    >
+                      <Check size={10} className="text-primary-foreground" />
+                    </motion.div>
+                  )}
+                  <span className="text-xl block mb-1.5">{option.icon}</span>
+                  <span className="text-xs font-medium">{option.label}</span>
                 </motion.button>
               ))}
             </div>
@@ -111,30 +122,30 @@ export default function Quiz() {
       </div>
 
       {/* Navigation */}
-      <div className="flex gap-4 mt-12">
+      <div className="flex gap-3 mt-10">
         {currentStep > 0 && (
           <motion.button
             onClick={handleBack}
-            className="flex items-center gap-2 px-6 py-3 glass-card text-foreground rounded-md font-body text-sm"
-            whileHover={{ scale: 1.03 }}
-            whileTap={{ scale: 0.97 }}
+            className="flex items-center gap-1.5 px-5 py-2.5 border border-border text-foreground rounded-lg font-body text-sm"
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
           >
-            <ArrowLeft size={16} /> Back
+            <ArrowLeft size={14} /> Back
           </motion.button>
         )}
         <motion.button
           onClick={handleNext}
           disabled={!canProceed}
-          className={`flex items-center gap-2 px-6 py-3 rounded-md font-body text-sm font-medium ${
+          className={`flex items-center gap-1.5 px-6 py-2.5 rounded-lg font-body text-sm font-medium transition-all ${
             canProceed
               ? 'bg-primary text-primary-foreground'
-              : 'bg-secondary text-muted-foreground cursor-not-allowed'
+              : 'bg-secondary text-muted-foreground cursor-not-allowed opacity-50'
           }`}
-          whileHover={canProceed ? { scale: 1.03 } : {}}
-          whileTap={canProceed ? { scale: 0.97 } : {}}
+          whileHover={canProceed ? { scale: 1.02 } : {}}
+          whileTap={canProceed ? { scale: 0.98 } : {}}
         >
-          {currentStep === totalSteps - 1 ? 'See Results' : 'Next'}
-          <ArrowRight size={16} />
+          {currentStep === totalSteps - 1 ? 'See Results' : 'Continue'}
+          <ArrowRight size={14} />
         </motion.button>
       </div>
     </div>
