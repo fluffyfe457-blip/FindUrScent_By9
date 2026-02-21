@@ -1,24 +1,44 @@
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { Perfume } from '@/types/perfume'
+import { useCompare } from '@/hooks/useCompare'
+import { Check } from 'lucide-react'
 
 type Props = {
   perfume: Perfume
   index?: number
 }
 
-/** Animated perfume card with hover lift effect */
+/** Animated perfume card with hover lift effect and compare toggle */
 export default function PerfumeCard({ perfume, index = 0 }: Props) {
+  const { isSelected, toggle, isFull } = useCompare()
+  const selected = isSelected(perfume.id)
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-40px' }}
       transition={{ duration: 0.4, delay: index * 0.08, ease: [0.22, 1, 0.36, 1] }}
+      className="relative"
     >
+      {/* Compare checkbox */}
+      <button
+        onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggle(perfume.id) }}
+        disabled={!selected && isFull}
+        className={`absolute top-3 left-3 z-10 w-6 h-6 rounded-md border flex items-center justify-center transition-all ${
+          selected
+            ? 'bg-primary border-primary text-primary-foreground'
+            : 'border-border bg-background/60 backdrop-blur-sm text-transparent hover:border-primary/50 disabled:opacity-30 disabled:cursor-not-allowed'
+        }`}
+        title={selected ? 'Remove from compare' : isFull ? 'Max 2 selected' : 'Add to compare'}
+      >
+        <Check size={13} strokeWidth={3} />
+      </button>
+
       <Link to={`/perfume/${perfume.id}`} className="block group">
         <motion.div
-          className="glass-card overflow-hidden rounded-xl"
+          className={`glass-card overflow-hidden rounded-xl transition-all ${selected ? 'ring-1 ring-primary/40' : ''}`}
           whileHover={{ y: -4, boxShadow: '0 16px 50px hsl(0 0% 0% / 0.4)' }}
           transition={{ type: 'spring', stiffness: 400, damping: 25 }}
         >
