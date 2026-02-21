@@ -1,46 +1,61 @@
-import { Link } from 'react-router-dom'
-import { motion } from 'framer-motion'
-import { Perfume } from '@/types/perfume'
-import { useCompare } from '@/hooks/useCompare'
-import { Check } from 'lucide-react'
+import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
+import { Perfume } from "@/types/perfume";
+import { useCompare } from "@/hooks/useCompare";
+import { ArrowRightLeft, Check } from "lucide-react";
 
 type Props = {
-  perfume: Perfume
-  index?: number
-}
+  perfume: Perfume;
+  index?: number;
+};
 
 /** Animated perfume card with hover lift effect and compare toggle */
 export default function PerfumeCard({ perfume, index = 0 }: Props) {
-  const { isSelected, toggle, isFull } = useCompare()
-  const selected = isSelected(perfume.id)
+  const { isSelected, toggle, isFull } = useCompare();
+  const selected = isSelected(perfume.id);
 
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: '-40px' }}
-      transition={{ duration: 0.4, delay: index * 0.08, ease: [0.22, 1, 0.36, 1] }}
+      viewport={{ once: true, margin: "-40px" }}
+      transition={{
+        duration: 0.4,
+        delay: index * 0.08,
+        ease: [0.22, 1, 0.36, 1],
+      }}
       className="relative"
     >
       {/* Compare checkbox */}
       <button
-        onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggle(perfume.id) }}
+        onClick={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          toggle(perfume.id);
+        }}
         disabled={!selected && isFull}
         className={`absolute top-3 left-3 z-10 w-6 h-6 rounded-md border flex items-center justify-center transition-all ${
           selected
-            ? 'bg-primary border-primary text-primary-foreground'
-            : 'border-border bg-background/60 backdrop-blur-sm text-transparent hover:border-primary/50 disabled:opacity-30 disabled:cursor-not-allowed'
+            ? "bg-primary border-primary text-primary-foreground"
+            : "border-border bg-background/60 backdrop-blur-sm text-transparent hover:border-primary/50 disabled:opacity-30 disabled:cursor-not-allowed"
         }`}
-        title={selected ? 'Remove from compare' : isFull ? 'Max 2 selected' : 'Add to compare'}
+        title={
+          selected
+            ? "Remove from compare"
+            : isFull
+              ? "Max 2 selected"
+              : "Add to compare"
+        }
       >
-        <Check size={13} strokeWidth={3} />
+        <ArrowRightLeft size={12} />
+        {selected && <Check size={10} />}
       </button>
 
       <Link to={`/perfume/${perfume.id}`} className="block group">
         <motion.div
-          className={`glass-card overflow-hidden rounded-xl transition-all ${selected ? 'ring-1 ring-primary/40' : ''}`}
-          whileHover={{ y: -4, boxShadow: '0 16px 50px hsl(0 0% 0% / 0.4)' }}
-          transition={{ type: 'spring', stiffness: 400, damping: 25 }}
+          className={`glass-card overflow-hidden rounded-xl transition-all ${selected ? "ring-1 ring-primary/40" : ""}`}
+          whileHover={{ y: -4, boxShadow: "0 16px 50px hsl(0 0% 0% / 0.4)" }}
+          transition={{ type: "spring", stiffness: 400, damping: 25 }}
         >
           {/* Image with dark overlay for consistency */}
           <div className="aspect-[4/5] overflow-hidden relative bg-secondary">
@@ -53,7 +68,9 @@ export default function PerfumeCard({ perfume, index = 0 }: Props) {
             <div className="absolute inset-0 bg-gradient-to-t from-card via-transparent to-transparent opacity-60" />
             {/* Price badge */}
             <div className="absolute top-3 right-3 px-2.5 py-1 rounded-md bg-background/80 backdrop-blur-sm">
-              <span className="text-xs font-body font-semibold text-primary">${perfume.price}</span>
+              <span className="text-xs font-body font-semibold text-primary">
+                ${perfume.price}
+              </span>
             </div>
           </div>
 
@@ -62,15 +79,21 @@ export default function PerfumeCard({ perfume, index = 0 }: Props) {
             <p className="text-[10px] uppercase tracking-[0.2em] text-primary/80 font-body font-medium">
               {perfume.brand}
             </p>
-            <h3 className="font-heading text-lg text-foreground leading-tight">{perfume.name}</h3>
+            <h3 className="font-heading text-lg text-foreground leading-tight">
+              {perfume.name}
+            </h3>
             <div className="flex items-center gap-2">
-              <span className="text-xs text-muted-foreground font-body capitalize">{perfume.scent_family}</span>
+              <span className="text-xs text-muted-foreground font-body capitalize">
+                {perfume.scent_family}
+              </span>
               <span className="w-1 h-1 rounded-full bg-border" />
-              <span className="text-xs text-muted-foreground font-body capitalize">{perfume.gender}</span>
+              <span className="text-xs text-muted-foreground font-body capitalize">
+                {perfume.gender}
+              </span>
             </div>
           </div>
         </motion.div>
       </Link>
     </motion.div>
-  )
+  );
 }
