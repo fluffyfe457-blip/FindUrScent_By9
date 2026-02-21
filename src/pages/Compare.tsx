@@ -94,11 +94,11 @@ export default function Compare() {
             key={row.label}
             className={`grid grid-cols-[1fr_auto_1fr] ${i !== rows.length - 1 ? 'border-b border-border' : ''}`}
           >
-            <div className="p-4 text-sm font-body text-foreground capitalize">{row.a}</div>
-            <div className="p-4 flex items-center justify-center min-w-[100px] sm:min-w-[120px] bg-secondary/30">
-              <span className="text-[10px] uppercase tracking-widest text-muted-foreground font-body">{row.label}</span>
+            <div className="p-2.5 sm:p-4 text-xs sm:text-sm font-body text-foreground capitalize">{row.a}</div>
+            <div className="p-2.5 sm:p-4 flex items-center justify-center min-w-[70px] sm:min-w-[110px] bg-secondary/30">
+              <span className="text-[8px] sm:text-[10px] uppercase tracking-wider sm:tracking-widest text-muted-foreground font-body text-center leading-tight">{row.label}</span>
             </div>
-            <div className="p-4 text-sm font-body text-foreground capitalize">{row.b}</div>
+            <div className="p-2.5 sm:p-4 text-xs sm:text-sm font-body text-foreground capitalize">{row.b}</div>
           </div>
         ))}
       </motion.div>
