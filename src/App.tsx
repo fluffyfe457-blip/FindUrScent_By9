@@ -8,6 +8,9 @@ import Navbar from "./components/Navbar";
 import PageTransition from "./components/PageTransition";
 import CompareBar from "./components/CompareBar";
 import { CompareProvider } from "./hooks/useCompare";
+import { QuickBuyProvider } from "./hooks/useQuickBuy";
+import QuickBuyDrawer from "./components/QuickBuyDrawer";
+import LanguageLoader from "./components/LanguageLoader";
 import Index from "./pages/Index";
 import Quiz from "./pages/Quiz";
 import Results from "./pages/Results";
@@ -16,6 +19,7 @@ import Compare from "./pages/Compare";
 import Collection from "./pages/Collection";
 import Guide from "./pages/Guide";
 import Explore from "./pages/Explore";
+import ScentAssistant from "./pages/ScentAssistant";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -34,6 +38,7 @@ function AnimatedRoutes() {
         <Route path="/collection" element={<PageTransition><Collection /></PageTransition>} />
         <Route path="/guide" element={<PageTransition><Guide /></PageTransition>} />
         <Route path="/explore" element={<PageTransition><Explore /></PageTransition>} />
+        <Route path="/assistant" element={<PageTransition><ScentAssistant /></PageTransition>} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </AnimatePresence>
@@ -44,13 +49,17 @@ const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
       <CompareProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
-          <Navbar />
-          <AnimatedRoutes />
-          <CompareBar />
-        </BrowserRouter>
+        <QuickBuyProvider>
+          <Toaster />
+          <Sonner />
+          <BrowserRouter>
+            <Navbar />
+            <LanguageLoader />
+            <AnimatedRoutes />
+            <CompareBar />
+            <QuickBuyDrawer />
+          </BrowserRouter>
+        </QuickBuyProvider>
       </CompareProvider>
     </TooltipProvider>
   </QueryClientProvider>

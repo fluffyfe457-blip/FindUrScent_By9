@@ -1,0 +1,136 @@
+{
+  "nav": {
+    "home": "Home",
+    "explore": "Explore",
+    "assistant": "AI Assistant",
+    "guide": "Guide",
+    "collection": "Collection",
+    "compare": "Compare",
+    "find_scent": "Find Your Scent"
+  },
+  "hero": {
+    "badge": "New — Winter Collection 2026",
+    "title_part1": "Find Your",
+    "title_part2": "Perfect",
+    "title_part3": "Scent",
+    "description": "Take our personalized quiz and discover fragrances curated for your unique style, mood, and lifestyle.",
+    "cta_quiz": "Take the Quiz",
+    "cta_ai": "Try Scent AI"
+  },
+  "features": {
+    "ai": {
+      "title": "AI Scent Narrator",
+      "desc": "Describe your story, find your essence"
+    },
+    "expert": {
+      "title": "Expert Curated",
+      "desc": "15+ premium fragrances reviewed"
+    },
+    "trust": {
+      "title": "Trusted Brands",
+      "desc": "Only authentic luxury houses"
+    },
+    "deep_dive": {
+      "title": "Note Deep-Dive",
+      "desc": "Analyze scents by core ingredients"
+    }
+  },
+  "sections": {
+    "seasonal": "Curated for You",
+    "seasonal_picks": "Essentials",
+    "discover": "Discover",
+    "featured": "Featured Fragrances",
+    "view_all": "View All",
+    "not_sure": "Not Sure Where to Start?",
+    "not_sure_desc": "Answer 5 quick questions and we'll match you with your ideal fragrance based on your preferences.",
+    "cta_start": "Find Your Scent"
+  },
+  "explore": {
+    "title": "The Collection",
+    "subtitle": "Discover Your Identity",
+    "search_placeholder": "Search by name, brand or scent family...",
+    "filter_all": "All Fragrances",
+    "filter_fresh": "Fresh",
+    "filter_floral": "Floral",
+    "filter_oriental": "Oriental",
+    "filter_woody": "Woody",
+    "count": "{{count}} fragrances found"
+  },
+  "common": {
+    "clear_all": "Clear all",
+    "clear_filters": "Clear Filters",
+    "no_matches": "No matches found",
+    "adjust_filters": "Try adjusting your filters",
+    "contact_buy": "Contact & Buy",
+    "add_compare": "Add to compare",
+    "remove_compare": "Remove from compare",
+    "max_compare": "Max 2 selected"
+  },
+  "gender": {
+    "all": "All",
+    "masculine": "Masculine",
+    "feminine": "Feminine",
+    "unisex": "Unisex"
+  },
+  "price": {
+    "all": "All",
+    "under_100": "Under $100",
+    "100_200": "$100 – $200",
+    "over_200": "$200+"
+  },
+  "detail": {
+    "back": "Back to Explore",
+    "longevity": "Longevity",
+    "sillage": "Sillage",
+    "scent_notes": "Scent Notes",
+    "top_notes": "Top Notes",
+    "top_desc": "First impression, fades quickly",
+    "heart_notes": "Heart Notes",
+    "heart_desc": "The core of the fragrance",
+    "base_notes": "Base Notes",
+    "base_desc": "Long-lasting foundation",
+    "also_like": "You May Also Like",
+    "similar": "Similar Fragrances",
+    "buy_telegram": "Purchase via Telegram",
+    "official_link": "Official Link"
+  },
+  "inquiry": {
+    "title": "Purchase Inquiry",
+    "header": "Connect with Seller",
+    "desc": "Directly message the seller to secure your bottle.",
+    "vibe_match": "Personalized Vibe Match",
+    "vibe_desc": "We've analyzed this scent against your preferences. Its {{top}} and {{base}} profile makes it a perfect soul-match for your narrative.",
+    "verified": "Verified Original",
+    "verified_desc": "100% authentic fragrance guaranteed.",
+    "shipping": "Direct Shipping",
+    "shipping_desc": "Coordinated directly with the seller.",
+    "opening": "Opening Telegram...",
+    "contact_btn": "Contact Seller to Buy",
+    "footer_note": "Clicking will open Telegram to chat with"
+  },
+  "assistant": {
+    "badge": "AI Scent Narrator",
+    "title_part1": "Tell your story,",
+    "title_part2": "essence",
+    "title_part3": "we'll find the",
+    "description": "Describe a mood, a place, or a memory. Our AI will analyze the notes and families to match you with your perfect fragrance.",
+    "input_label": "Describe Your Vibe",
+    "input_placeholder": "Ex: A rainy afternoon in a library, wearing a soft wool sweater with the smell of old paper and cedarwood...",
+    "input_hint": "Deep. Specific. Poetic.",
+    "characters": "characters",
+    "cta_find": "Find My Fragrance",
+    "cta_analyzing": "Distilling Essence...",
+    "reading_lines": "Reading between the lines...",
+    "mapping": "Mapping scent frequencies",
+    "results_badge": "Analysis Results",
+    "results_title": "Your Olfactory Blueprint",
+    "no_matches": "No exact matches found for that story. Try adding more concrete keywords like \"fresh\", \"dark\", or \"flowery\".",
+    "signature_notes": "Signature Note Keywords",
+    "explorer_title": "Note Explorer",
+    "explorer_desc": "Deep dive into core ingredients. Select a note to find perfumes where it takes center stage.",
+    "explorer_found": "Found",
+    "classic_note": "Classic {{note}}",
+    "explorer_cta": "Explore Full {{note}} Collection",
+    "explorer_placeholder": "Select a note to unveil iconic pairings"
+  }
+}

@@ -19,8 +19,8 @@ export default {
     },
     extend: {
       fontFamily: {
-        heading: ['"Cormorant Garamond"', "serif"],
-        body: ['"Inter"', "sans-serif"],
+        heading: ['"Bodoni Moda"', '"Kantumruy Pro"', "serif"],
+        body: ['"Jost"', '"Kantumruy Pro"', "sans-serif"],
       },
       colors: {
         border: "hsl(var(--border))",

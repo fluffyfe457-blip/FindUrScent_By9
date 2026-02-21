@@ -2,7 +2,9 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Perfume } from "@/types/perfume";
 import { useCompare } from "@/hooks/useCompare";
-import { ArrowRightLeft, Check } from "lucide-react";
+import { useQuickBuy } from "@/hooks/useQuickBuy";
+import { ArrowRightLeft, Check, ShoppingBag } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 type Props = {
   perfume: Perfume;
@@ -11,8 +13,16 @@ type Props = {
 
 /** Animated perfume card with hover lift effect and compare toggle */
 export default function PerfumeCard({ perfume, index = 0 }: Props) {
+  const { t } = useTranslation();
   const { isSelected, toggle, isFull } = useCompare();
+  const { openQuickBuy } = useQuickBuy();
   const selected = isSelected(perfume.id);
+
+  const handleQuickBuy = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    openQuickBuy(perfume);
+  };
 
   return (
     <motion.div
@@ -41,10 +51,10 @@ export default function PerfumeCard({ perfume, index = 0 }: Props) {
         }`}
         title={
           selected
-            ? "Remove from compare"
+            ? t('common.remove_compare')
             : isFull
-              ? "Max 2 selected"
-              : "Add to compare"
+              ? t('common.max_compare')
+              : t('common.add_compare')
         }
       >
         <ArrowRightLeft size={12} />
@@ -66,6 +76,19 @@ export default function PerfumeCard({ perfume, index = 0 }: Props) {
               loading="lazy"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-card via-transparent to-transparent opacity-60" />
+            
+            {/* Quick Buy Overlay Button */}
+            <motion.button
+              onClick={handleQuickBuy}
+              initial={{ opacity: 0, y: 10 }}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="absolute bottom-4 left-4 right-4 py-2.5 bg-primary text-primary-foreground rounded-lg flex items-center justify-center gap-2 text-xs font-heading font-semibold opacity-0 group-hover:opacity-100 group-hover:translate-y-0 translate-y-2 transition-all duration-300 shadow-xl shadow-black/20"
+            >
+              <ShoppingBag size={14} />
+              {t('common.contact_buy')}
+            </motion.button>
+
             {/* Price badge */}
             <div className="absolute top-3 right-3 px-2.5 py-1 rounded-md bg-background/80 backdrop-blur-sm">
               <span className="text-xs font-body font-semibold text-primary">
@@ -79,16 +102,16 @@ export default function PerfumeCard({ perfume, index = 0 }: Props) {
             <p className="text-[10px] uppercase tracking-[0.2em] text-primary/80 font-body font-medium">
               {perfume.brand}
             </p>
-            <h3 className="font-heading text-lg text-foreground leading-tight">
+            <h3 className="font-heading text-base text-white font-medium leading-tight">
               {perfume.name}
             </h3>
             <div className="flex items-center gap-2">
               <span className="text-xs text-muted-foreground font-body capitalize">
-                {perfume.scent_family}
+                {t(`explore.filter_${perfume.scent_family}`, perfume.scent_family)}
               </span>
               <span className="w-1 h-1 rounded-full bg-border" />
               <span className="text-xs text-muted-foreground font-body capitalize">
-                {perfume.gender}
+                {t(`gender.${perfume.gender}`, perfume.gender)}
               </span>
             </div>
           </div>

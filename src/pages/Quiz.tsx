@@ -49,104 +49,110 @@ export default function Quiz() {
   }
 
   return (
-    <div className="min-h-[100svh] flex flex-col items-center justify-center px-6 py-24">
-      {/* Step indicators */}
-      <div className="w-full max-w-md mb-14">
-        <div className="flex gap-1.5">
-          {Array.from({ length: totalSteps }).map((_, i) => (
-            <div key={i} className="flex-1 h-1 rounded-full overflow-hidden bg-secondary">
-              <motion.div
-                className="h-full gold-border-gradient"
-                initial={false}
-                animate={{ width: i <= currentStep ? '100%' : '0%' }}
-                transition={{ duration: 0.4, ease: 'easeOut' }}
-              />
-            </div>
-          ))}
+    <div className="min-h-[100svh] flex flex-col items-center justify-center relative overflow-hidden px-6 pt-32 pb-24">
+      {/* Background Blobs */}
+      <div className="fixed inset-0 z-0 pointer-events-none">
+        <div className="absolute top-[20%] right-[10%] w-[300px] h-[300px] bg-primary/10 rounded-full blur-[100px]" />
+        <div className="absolute bottom-[20%] left-[10%] w-[300px] h-[300px] bg-gold-dark/5 rounded-full blur-[100px]" />
+      </div>
+
+      <div className="w-full max-w-2xl relative z-10 flex flex-col items-center">
+        {/* Step indicators */}
+        <div className="w-full max-w-md mb-16 space-y-4">
+          <div className="flex gap-2.5">
+            {Array.from({ length: totalSteps }).map((_, i) => (
+              <div key={i} className="flex-1 h-1.5 rounded-full overflow-hidden bg-white/5">
+                <motion.div
+                  className="h-full bg-primary shadow-[0_0_10px_rgba(202,138,4,0.3)]"
+                  initial={false}
+                  animate={{ width: i <= currentStep ? '100%' : '0%' }}
+                  transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+                />
+              </div>
+            ))}
+          </div>
+          <p className="text-center text-[10px] font-body font-bold uppercase tracking-[0.4em] text-primary/60">
+            Phase {currentStep + 1} <span className="mx-2 text-white/20">/</span> {totalSteps}
+          </p>
         </div>
-        <p className="text-center text-xs text-muted-foreground font-body mt-3">
-          Step {currentStep + 1} of {totalSteps}
-        </p>
-      </div>
 
-      {/* Question Card */}
-      <div className="w-full max-w-md">
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={question.id}
-            initial={{ opacity: 0, x: 50 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -50 }}
-            transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-            className="space-y-8"
+        {/* Question Card */}
+        <div className="w-full max-w-xl">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={question.id}
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 1.05, y: -20 }}
+              transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+              className="space-y-12"
+            >
+              <div className="space-y-3">
+                <h2 className="font-heading text-2xl sm:text-4xl text-white text-center font-bold leading-[1.1]">
+                  {question.question}
+                </h2>
+                {question.multiple && (
+                  <p className="text-center text-primary uppercase tracking-[0.2em] text-[10px] font-body font-bold">
+                    Select all that resonate with you
+                  </p>
+                )}
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                {question.options.map((option, i) => (
+                  <motion.button
+                    key={option.value}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: i * 0.05 }}
+                    onClick={() => handleSelect(option.value)}
+                    className={`relative p-6 rounded-2xl text-center transition-all duration-500 border group cursor-pointer ${
+                      isSelected(option.value)
+                        ? 'bg-primary/20 border-primary/40 shadow-2xl shadow-primary/20 ring-1 ring-primary/20'
+                        : 'bg-white/5 border-white/5 text-foreground/60 hover:border-white/20 hover:bg-white/[0.08] hover:text-white'
+                    }`}
+                  >
+                    {isSelected(option.value) && (
+                      <motion.div
+                        initial={{ scale: 0, rotate: -45 }}
+                        animate={{ scale: 1, rotate: 0 }}
+                        className="absolute top-3 right-3 w-5 h-5 rounded-full bg-primary flex items-center justify-center shadow-lg"
+                      >
+                        <Check size={12} className="text-primary-foreground stroke-[3px]" />
+                      </motion.div>
+                    )}
+                    <span className="text-3xl block mb-4 transition-transform duration-500 group-hover:scale-125 group-active:scale-95">{option.icon}</span>
+                    <span className="text-[11px] font-body font-bold uppercase tracking-widest">{option.label}</span>
+                  </motion.button>
+                ))}
+              </div>
+            </motion.div>
+          </AnimatePresence>
+        </div>
+
+        {/* Navigation */}
+        <div className="flex gap-4 mt-16">
+          {currentStep > 0 && (
+            <button
+              onClick={handleBack}
+              className="px-8 py-4 rounded-xl bg-white/5 border border-white/10 text-foreground font-body text-[10px] font-bold uppercase tracking-widest hover:bg-white/10 hover:text-white transition-all duration-500 cursor-pointer flex items-center gap-3"
+            >
+              <ArrowLeft size={14} /> Back
+            </button>
+          )}
+          <button
+            onClick={handleNext}
+            disabled={!canProceed}
+            className={`px-10 py-4 rounded-xl font-heading text-base font-bold tracking-wide transition-all duration-500 flex items-center gap-3 shadow-xl ${
+              canProceed
+                ? 'bg-primary text-primary-foreground shadow-primary/20 hover:gold-glow hover:scale-[1.02] active:scale-95 cursor-pointer'
+                : 'bg-white/5 text-white/20 border border-white/5 cursor-not-allowed grayscale'
+            }`}
           >
-            <h2 className="font-heading text-2xl sm:text-3xl text-foreground text-center leading-tight">
-              {question.question}
-            </h2>
-
-            {question.multiple && (
-              <p className="text-center text-muted-foreground text-xs font-body">
-                Select all that apply
-              </p>
-            )}
-
-            <div className="grid grid-cols-2 gap-2.5">
-              {question.options.map(option => (
-                <motion.button
-                  key={option.value}
-                  onClick={() => handleSelect(option.value)}
-                  className={`relative p-4 rounded-xl text-center font-body transition-all duration-200 border ${
-                    isSelected(option.value)
-                      ? 'bg-primary/10 border-primary/40 text-foreground'
-                      : 'bg-card/50 border-border/50 text-muted-foreground hover:border-primary/20 hover:text-foreground'
-                  }`}
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                >
-                  {isSelected(option.value) && (
-                    <motion.div
-                      initial={{ scale: 0 }}
-                      animate={{ scale: 1 }}
-                      className="absolute top-2 right-2 w-4 h-4 rounded-full bg-primary flex items-center justify-center"
-                    >
-                      <Check size={10} className="text-primary-foreground" />
-                    </motion.div>
-                  )}
-                  <span className="text-xl block mb-1.5">{option.icon}</span>
-                  <span className="text-xs font-medium">{option.label}</span>
-                </motion.button>
-              ))}
-            </div>
-          </motion.div>
-        </AnimatePresence>
-      </div>
-
-      {/* Navigation */}
-      <div className="flex gap-3 mt-10">
-        {currentStep > 0 && (
-          <motion.button
-            onClick={handleBack}
-            className="flex items-center gap-1.5 px-5 py-2.5 border border-border text-foreground rounded-lg font-body text-sm"
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-          >
-            <ArrowLeft size={14} /> Back
-          </motion.button>
-        )}
-        <motion.button
-          onClick={handleNext}
-          disabled={!canProceed}
-          className={`flex items-center gap-1.5 px-6 py-2.5 rounded-lg font-body text-sm font-medium transition-all ${
-            canProceed
-              ? 'bg-primary text-primary-foreground'
-              : 'bg-secondary text-muted-foreground cursor-not-allowed opacity-50'
-          }`}
-          whileHover={canProceed ? { scale: 1.02 } : {}}
-          whileTap={canProceed ? { scale: 0.98 } : {}}
-        >
-          {currentStep === totalSteps - 1 ? 'See Results' : 'Continue'}
-          <ArrowRight size={14} />
-        </motion.button>
+            {currentStep === totalSteps - 1 ? 'Reveal Results' : 'Continue'}
+            <ArrowRight size={18} className={canProceed ? 'group-hover:translate-x-1 duration-500' : ''} />
+          </button>
+        </div>
       </div>
     </div>
   )

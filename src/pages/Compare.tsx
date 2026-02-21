@@ -53,115 +53,131 @@ export default function Compare() {
   ]
 
   return (
-    <div className="min-h-screen pt-20 pb-16 px-6 sm:px-8 lg:px-12 max-w-5xl mx-auto">
-      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mb-8">
-        <Link
-          to="/explore"
-          className="inline-flex items-center gap-1.5 text-muted-foreground text-xs font-body hover:text-foreground transition-colors"
+    <div className="min-h-screen pt-32 pb-24 relative overflow-hidden">
+      {/* Background Blobs */}
+      <div className="fixed inset-0 z-0 pointer-events-none">
+        <div className="absolute top-[20%] right-[15%] w-[400px] h-[400px] bg-primary/5 rounded-full blur-[120px]" />
+        <div className="absolute bottom-[20%] left-[15%] w-[400px] h-[400px] bg-gold-dark/5 rounded-full blur-[120px]" />
+      </div>
+
+      <div className="container relative z-10 px-6 sm:px-8 lg:px-12 max-w-5xl mx-auto">
+        <motion.div initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} className="mb-12">
+          <Link
+            to="/explore"
+            className="inline-flex items-center gap-2 text-muted-foreground text-[10px] font-body font-bold uppercase tracking-[0.2em] hover:text-primary transition-all group bg-white/5 px-4 py-2 rounded-full border border-white/5 cursor-pointer"
+          >
+            <ArrowLeft size={12} className="group-hover:-translate-x-1.5 transition-transform duration-500" /> Back to Explore
+          </Link>
+        </motion.div>
+
+        <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} className="space-y-3 mb-12">
+          <p className="text-primary uppercase tracking-[0.4em] text-[10px] font-body font-bold">Side by Side</p>
+          <h1 className="font-heading text-3xl sm:text-5xl text-white font-bold">Compare Fragrances</h1>
+        </motion.div>
+
+        {/* Header images */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1, duration: 0.8 }}
+          className="grid grid-cols-[1fr_auto_1fr] gap-6 sm:gap-10 mb-16 items-start"
         >
-          <ArrowLeft size={12} /> Back to Explore
-        </Link>
-      </motion.div>
-
-      <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} className="space-y-1 mb-10">
-        <p className="text-primary uppercase tracking-[0.2em] text-xs font-body">Side by Side</p>
-        <h1 className="font-heading text-3xl sm:text-4xl text-foreground">Compare Fragrances</h1>
-      </motion.div>
-
-      {/* Header images */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.1 }}
-        className="grid grid-cols-[1fr_auto_1fr] gap-4 mb-10"
-      >
-        <PerfumeHeader perfume={a} />
-        <div className="flex items-end pb-4">
-          <span className="text-muted-foreground font-heading text-lg">vs</span>
-        </div>
-        <PerfumeHeader perfume={b} />
-      </motion.div>
-
-      {/* Comparison table */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.2 }}
-        className="glass-card rounded-xl overflow-hidden"
-      >
-        {rows.map((row, i) => (
-          <div
-            key={row.label}
-            className={`grid grid-cols-[1fr_auto_1fr] ${i !== rows.length - 1 ? 'border-b border-border' : ''}`}
-          >
-            <div className="p-2.5 sm:p-4 text-xs sm:text-sm font-body text-foreground capitalize">{row.a}</div>
-            <div className="p-2.5 sm:p-4 flex items-center justify-center min-w-[70px] sm:min-w-[110px] bg-secondary/30">
-              <span className="text-[8px] sm:text-[10px] uppercase tracking-wider sm:tracking-widest text-muted-foreground font-body text-center leading-tight">{row.label}</span>
+          <PerfumeHeader perfume={a} />
+          <div className="flex items-center justify-center pt-24">
+            <div className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center bg-white/5 backdrop-blur-xl">
+              <span className="text-muted-foreground font-heading text-base gold-gradient font-bold italic">vs</span>
             </div>
-            <div className="p-2.5 sm:p-4 text-xs sm:text-sm font-body text-foreground capitalize">{row.b}</div>
           </div>
-        ))}
-      </motion.div>
+          <PerfumeHeader perfume={b} />
+        </motion.div>
 
-      {/* Buy links */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.3 }}
-        className="grid grid-cols-2 gap-4 mt-8"
-      >
-        {[a, b].map(p => (
-          <a
-            key={p.id}
-            href={p.buy_link}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="block text-center py-3 rounded-lg bg-primary/10 text-primary text-sm font-body hover:bg-primary/20 transition-colors"
-          >
-            Buy {p.name}
-          </a>
-        ))}
-      </motion.div>
+        {/* Comparison Table */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2, duration: 0.8 }}
+          className="liquid-glass rounded-[2rem] border-white/10 overflow-hidden shadow-2xl"
+        >
+          {rows.map((row, i) => (
+            <div
+              key={row.label}
+              className={`grid grid-cols-[1fr_auto_1fr] group ${i !== rows.length - 1 ? 'border-b border-white/5' : ''}`}
+            >
+              <div className="p-4 sm:p-6 text-xs sm:text-sm font-body text-foreground/80 capitalize flex items-center transition-colors group-hover:bg-white/[0.01]">
+                {row.a}
+              </div>
+              <div className="p-2.5 sm:p-4 flex items-center justify-center min-w-[80px] sm:min-w-[140px] bg-white/[0.03] border-x border-white/5">
+                <span className="text-[9px] uppercase tracking-[0.2em] text-primary/80 font-bold font-body text-center leading-tight">{row.label}</span>
+              </div>
+              <div className="p-4 sm:p-6 text-xs sm:text-sm font-body text-foreground/80 capitalize flex items-center justify-end transition-colors group-hover:bg-white/[0.01] text-right">
+                {row.b}
+              </div>
+            </div>
+          ))}
+        </motion.div>
+
+        {/* Buy Links */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.3, duration: 1 }}
+          className="grid grid-cols-2 gap-4 sm:gap-8 mt-12"
+        >
+          {[a, b].map(p => (
+            <Link
+              key={p.id}
+              to={`/perfume/${p.id}`}
+              className="flex items-center justify-center py-4 rounded-xl bg-primary text-primary-foreground font-heading text-base font-bold hover:gold-glow hover:scale-[1.02] active:scale-95 transition-all duration-500 shadow-xl shadow-primary/20 cursor-pointer"
+            >
+              Experience {p.name}
+            </Link>
+          ))}
+        </motion.div>
+      </div>
     </div>
   )
 }
 
 function PerfumeHeader({ perfume }: { perfume: typeof perfumes[0] }) {
   return (
-    <div className="text-center space-y-3">
-      <div className="aspect-[3/4] max-h-48 mx-auto rounded-lg overflow-hidden bg-secondary">
-        <img src={perfume.image_url} alt={perfume.name} className="w-full h-full object-cover" />
+    <div className="text-center space-y-6 group">
+      <div className="aspect-[3/4] max-h-72 sm:max-h-96 mx-auto rounded-3xl overflow-hidden bg-secondary shadow-2xl border border-white/5 relative">
+        <img src={perfume.image_url} alt={perfume.name} className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
       </div>
-      <div>
-        <p className="text-[10px] uppercase tracking-[0.2em] text-primary/80 font-body">{perfume.brand}</p>
-        <h2 className="font-heading text-lg text-foreground">{perfume.name}</h2>
-        <p className="text-primary font-heading text-base">${perfume.price}</p>
-      </div>
+      <motion.div layout className="space-y-2">
+        <p className="text-[10px] uppercase tracking-[0.3em] text-primary font-body font-bold">{perfume.brand}</p>
+        <h2 className="font-heading text-2xl sm:text-3xl text-white font-bold">{perfume.name}</h2>
+        <p className="text-white font-heading text-xl sm:text-2xl font-bold opacity-80">${perfume.price}</p>
+      </motion.div>
     </div>
   )
 }
 
 function StatBar({ value }: { value: number }) {
   return (
-    <div className="flex items-center gap-2">
-      <div className="flex gap-0.5">
+    <div className="flex flex-col gap-2">
+      <div className="flex gap-1">
         {Array.from({ length: 10 }).map((_, i) => (
           <div
             key={i}
-            className={`w-2 h-4 rounded-[2px] ${i < value ? 'gold-border-gradient' : 'bg-secondary'}`}
+            className={`w-2 h-4 sm:w-3 sm:h-5 rounded-[2px] transition-all duration-700 ${
+              i < value ? 'bg-primary shadow-[0_0_10px_rgba(202,138,4,0.3)]' : 'bg-white/5'
+            }`}
+            style={{ transitionDelay: `${i * 50}ms` }}
           />
         ))}
       </div>
-      <span className="text-[10px] text-muted-foreground font-body">{statLabel(value)}</span>
+      <span className="text-[9px] text-muted-foreground font-body font-bold uppercase tracking-widest">{statLabel(value)}</span>
     </div>
   )
 }
 
 function NotePills({ notes }: { notes: { name: string }[] }) {
   return (
-    <div className="flex flex-wrap gap-1">
+    <div className="flex flex-wrap gap-1.5 justify-start">
       {notes.map(n => (
-        <span key={n.name} className="px-2 py-0.5 text-[10px] font-body border border-border text-foreground rounded-full">
+        <span key={n.name} className="px-3 py-1 text-[10px] font-body font-bold bg-white/5 border border-white/5 text-foreground/70 rounded-lg hover:border-primary/30 hover:text-white transition-all duration-500">
           {n.name}
         </span>
       ))}
