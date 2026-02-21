@@ -1,7 +1,8 @@
 import { Link, useLocation } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useState } from 'react'
-import { Menu, X, Sparkles } from 'lucide-react'
+import { Menu, X, Sparkles, ArrowRightLeft } from 'lucide-react'
+import { useCompare } from '@/hooks/useCompare'
 
 const links = [
   { to: '/', label: 'Home' },
@@ -14,6 +15,7 @@ const links = [
 export default function Navbar() {
   const location = useLocation()
   const [mobileOpen, setMobileOpen] = useState(false)
+  const { selected } = useCompare()
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50">
@@ -47,6 +49,31 @@ export default function Navbar() {
                   )}
                 </Link>
               ))}
+
+              {/* Compare link with badge */}
+              <Link
+                to={selected.length === 2 ? `/compare?ids=${selected.join(',')}` : '/explore'}
+                className={`relative px-3.5 py-1.5 text-[13px] font-body transition-colors rounded-md flex items-center gap-1.5 ${
+                  location.pathname === '/compare'
+                    ? 'text-foreground'
+                    : 'text-muted-foreground hover:text-foreground'
+                }`}
+              >
+                <ArrowRightLeft size={13} />
+                Compare
+                {selected.length > 0 && (
+                  <span className="ml-0.5 w-4 h-4 flex items-center justify-center rounded-full bg-primary text-primary-foreground text-[9px] font-medium">
+                    {selected.length}
+                  </span>
+                )}
+                {location.pathname === '/compare' && (
+                  <motion.div
+                    layoutId="nav-pill"
+                    className="absolute inset-0 bg-secondary/60 rounded-md -z-10"
+                    transition={{ type: 'spring', stiffness: 500, damping: 30 }}
+                  />
+                )}
+              </Link>
             </div>
 
             {/* CTA + Mobile toggle */}
@@ -79,7 +106,7 @@ export default function Navbar() {
             className="md:hidden overflow-hidden backdrop-blur-xl bg-background/95 border-b border-border/50"
           >
             <div className="px-6 py-3 space-y-1">
-              {[...links, { to: '/quiz', label: 'Find Your Scent' }].map(link => (
+              {[...links, { to: selected.length === 2 ? `/compare?ids=${selected.join(',')}` : '/explore', label: 'Compare' }, { to: '/quiz', label: 'Find Your Scent' }].map(link => (
                 <Link
                   key={link.to}
                   to={link.to}
